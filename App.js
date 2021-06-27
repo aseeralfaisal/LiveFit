@@ -1,21 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import AppDrawer from './AppDrawer';
+import TabScreen from './TabScreen';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  let [fontsLoaded] = useFonts({
+    'Comfortaa-Regular': require('./fonts/Comfortaa-Regular.ttf'),
+    'Comfortaa-Medium': require('./fonts/Comfortaa-Medium.ttf'),
+    'Comfortaa-Bold': require('./fonts/Comfortaa-Bold.ttf'),
+  });
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return <TabScreen />;
+  }
+}

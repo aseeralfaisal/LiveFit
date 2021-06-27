@@ -1,12 +1,16 @@
 {
-  "name": "rn-app",
-  "displayName": "rn-app",
+  "name": "LIVEFIT",
+  "displayName": "LIVEFIT",
   "expo": {
     "name": "rn-app",
     "slug": "rn-app",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": ["**/*"],
+    "splash": {
+      "image": "./icons/livefitlogo.png",
+      "backgroundColor": "#1e1e1e",
+      "resizeMode": "contain",
+    }
   }
 }
