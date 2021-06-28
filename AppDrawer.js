@@ -3,7 +3,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import Home from './Home';
 import WalkSteps from './WalkSteps';
-import Demo from './Demo';
 import { useColorScheme } from 'react-native-appearance';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { StyleSheet, Image } from 'react-native';

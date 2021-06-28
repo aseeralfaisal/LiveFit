@@ -3,7 +3,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import Home from './Home';
 import WalkSteps from './WalkSteps';
-import Demo from './Demo';
+import BMI from './BMI';
 import { useColorScheme } from 'react-native-appearance';
 import { StyleSheet, Image } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -62,13 +62,13 @@ export default function AppDrawer() {
           }}
         />
         <Tab.Screen
-          name="Account"
-          component={Demo}
+          name="BMI"
+          component={BMI}
           options={{
-            tabBarLabel: 'Account',
+            tabBarLabel: 'BMI',
             tabBarIcon: ({ color }) => (
               <Image
-                source={require('./icons/manage.png')}
+                source={require('./icons/weight_scale.png')}
                 style={{
                   height: 30,
                   width: 30,

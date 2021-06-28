@@ -15,13 +15,12 @@ export default function Home({ navigation, steps, setSteps }) {
       }}
     >
       <Header navigation={navigation} />
-      <Text style={styles.date}>Today is {Date().slice(0, 11)}</Text>
-
       <View style={styles.circlesContainer}>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'center',
+            marginTop: -50,
           }}
         >
           <View style={styles.circleTile}>
@@ -55,22 +54,22 @@ export default function Home({ navigation, steps, setSteps }) {
             />
             <Text style={styles.stepsText}>Weight</Text>
           </View>
-        </View>
 
-        <View style={styles.circleTile}>
-          <AnimatedCircularProgress
-            size={110}
-            width={5}
-            fill={25}
-            tintColor="#FF8C53"
-            // onAnimationComplete={() => console.log('onAnimationComplete')}
-            backgroundColor="rgb(80,80,80)"
-          />
-          <Image
-            source={require('./icons/food.png')}
-            style={styles.circleIcon}
-          />
-          <Text style={styles.stepsText}>Meals</Text>
+          <View style={styles.circleTile}>
+            <AnimatedCircularProgress
+              size={110}
+              width={5}
+              fill={25}
+              tintColor="#FF8C53"
+              // onAnimationComplete={() => console.log('onAnimationComplete')}
+              backgroundColor="rgb(80,80,80)"
+            />
+            <Image
+              source={require('./icons/food.png')}
+              style={styles.circleIcon}
+            />
+            <Text style={styles.stepsText}>Meals</Text>
+          </View>
         </View>
       </View>
 
@@ -109,16 +108,6 @@ export default function Home({ navigation, steps, setSteps }) {
 }
 
 const styles = StyleSheet.create({
-  date: {
-    color: 'white',
-    alignSelf: 'flex-start',
-    marginHorizontal: 32,
-    marginVertical: 20,
-    marginTop: -60,
-    color: '#FF8C53',
-    fontSize: 22,
-    fontFamily: 'Comfortaa-Bold',
-  },
   circlesContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
