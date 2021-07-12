@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Button,
+} from 'react-native';
 import { useState, useEffect } from 'react';
 import { Pedometer } from 'expo-sensors';
 import Header from './Header';
@@ -11,11 +18,6 @@ export default function WalkSteps({ navigation, steps, setSteps }) {
   // const [steps, setSteps] = useState(0);
 
   useEffect(() => {
-    Pedometer.isAvailableAsync().then((e) => {
-      console.log(e);
-    });
-  }, []);
-  useEffect(() => {
     Pedometer.watchStepCount((PedometerResult) =>
       setSteps(PedometerResult.steps)
     );
@@ -24,7 +26,7 @@ export default function WalkSteps({ navigation, steps, setSteps }) {
         setSteps(PedometerResult.steps)
       ).remove();
     };
-  }, []);
+  });
 
   return (
     <View

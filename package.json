@@ -1,44 +1,30 @@
 {
+  "name": "livefit",
+  "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "web": "expo start --web",
-    "start": "react-native start"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aseeralfaisal/livefit.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aseeralfaisal/livefit/issues"
+  },
+  "homepage": "https://github.com/aseeralfaisal/livefit#readme",
   "dependencies": {
-    "@expo-google-fonts/inter": "^0.1.0",
-    "@react-navigation/bottom-tabs": "^5.11.11",
-    "@react-navigation/drawer": "^5.12.5",
-    "@react-navigation/material-bottom-tabs": "^5.3.15",
-    "expo": "~41.0.1",
-    "expo-app-loading": "^1.0.3",
-    "expo-av": "^9.1.2",
-    "expo-brightness": "~9.1.2",
-    "expo-calendar": "~9.1.2",
-    "expo-font": "~9.1.0",
-    "expo-sensors": "~10.1.2",
-    "expo-splash-screen": "~0.10.2",
-    "expo-status-bar": "~1.0.4",
-    "expo-updates": "~0.5.4",
-    "firebase": "8.2.3",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-native": "~0.63.4",
-    "react-native-appearance": "~0.3.3",
-    "react-native-circular-progress": "^1.3.7",
-    "react-native-gesture-handler": "~1.10.2",
-    "react-native-google-fit": "^0.17.0",
-    "react-native-reanimated": "~2.1.0",
-    "react-native-screens": "~3.0.0",
-    "react-native-track-player": "^1.2.7",
-    "react-native-unimodules": "~0.13.3",
-    "react-native-vector-icons": "^8.1.0",
-    "react-native-web": "~0.13.12",
-    "styled-components": "^5.3.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.9.0"
-  },
-  "private": true
+    "@react-navigation/stack": "^5.14.5",
+    "axios": "^0.21.1",
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.6.10",
+    "mongoose": "^5.13.2"
+  }
 }

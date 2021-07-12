@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import Header from './Header';
 import { useColorScheme } from 'react-native-appearance';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home({ navigation, steps, setSteps }) {
   let colorScheme = useColorScheme();

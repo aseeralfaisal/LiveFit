@@ -1,25 +1,25 @@
 import * as React from 'react';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import Home from './Home';
 import WalkSteps from './WalkSteps';
 import BMI from './BMI';
 import { useColorScheme } from 'react-native-appearance';
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, View } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { useState } from 'react';
 
-const Drawer = createDrawerNavigator();
 const Tab = createMaterialBottomTabNavigator();
+const Stack = createStackNavigator();
 
-export default function AppDrawer() {
+export default function TabScreen() {
   const [steps, setSteps] = useState(0);
 
   let colorScheme = useColorScheme();
   return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName="Feed"
+        initialRouteName="Home"
         activeColor="rgb(80,190,800)"
         barStyle={{ backgroundColor: 'rgb(50, 50, 50)' }}
         shifting={true}
