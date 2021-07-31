@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import TabScreen from './TabScreen';
-import SignIn from './SignIn';
+import SignIn from './Components/SignIn';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
@@ -17,16 +17,16 @@ export default function App() {
   });
 
   let [fontsLoaded] = useFonts({
-    'Comfortaa-Regular': require('./fonts/Comfortaa-Regular.ttf'),
-    'Comfortaa-Medium': require('./fonts/Comfortaa-Medium.ttf'),
-    'Comfortaa-Bold': require('./fonts/Comfortaa-Bold.ttf'),
+    'Comfortaa-Regular': require('./assets/fonts/Comfortaa-Regular.ttf'),
+    'Comfortaa-Medium': require('./assets/fonts/Comfortaa-Medium.ttf'),
+    'Comfortaa-Bold': require('./assets/fonts/Comfortaa-Bold.ttf'),
   });
 
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
     return loggedIn ? (
-      <TabScreen />
+      <TabScreen loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
     ) : (
       <SignIn loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
     );

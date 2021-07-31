@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import Home from './Home';
-import WalkSteps from './WalkSteps';
-import BMI from './BMI';
+import Home from './Components/Home';
+import WalkSteps from './Components/WalkSteps';
+import BMI from './Components/BMI';
+import about from './Components/About';
 import { useColorScheme } from 'react-native-appearance';
 import { StyleSheet, Image, View } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -12,7 +13,7 @@ import { useState } from 'react';
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
 
-export default function TabScreen() {
+export default function TabScreen({ setLoggedIn }) {
   const [steps, setSteps] = useState(0);
 
   let colorScheme = useColorScheme();
@@ -20,19 +21,21 @@ export default function TabScreen() {
     <NavigationContainer>
       <Tab.Navigator
         initialRouteName="Home"
-        activeColor="rgb(80,190,800)"
+        activeColor="#FF8C53"
         barStyle={{ backgroundColor: 'rgb(50, 50, 50)' }}
         shifting={true}
         labeled={false}
       >
         <Tab.Screen
           name="Home"
-          children={() => <Home steps={steps} setSteps={setSteps} />}
+          children={() => (
+            <Home steps={steps} setSteps={setSteps} setLoggedIn={setLoggedIn} />
+          )}
           options={{
             tabBarLabel: 'Home',
             tabBarIcon: ({ color }) => (
               <Image
-                source={require('./icons/home.png')}
+                source={require('./assets/icons/home.png')}
                 style={{
                   height: 30,
                   width: 30,
@@ -51,7 +54,7 @@ export default function TabScreen() {
             tabBarLabel: 'WalkSteps',
             tabBarIcon: ({ color }) => (
               <Image
-                source={require('./icons/walk.png')}
+                source={require('./assets/icons/walk.png')}
                 style={{
                   height: 30,
                   width: 30,
@@ -68,7 +71,7 @@ export default function TabScreen() {
             tabBarLabel: 'BMI',
             tabBarIcon: ({ color }) => (
               <Image
-                source={require('./icons/weight_scale.png')}
+                source={require('./assets/icons/weight_scale.png')}
                 style={{
                   height: 30,
                   width: 30,
@@ -76,7 +79,23 @@ export default function TabScreen() {
                 }}
               />
             ),
-            // tabBarColor: 'rgb(80,140,800)',
+          }}
+        />
+        <Tab.Screen
+          name="about"
+          component={about}
+          options={{
+            tabBarLabel: 'BMI',
+            tabBarIcon: ({ color }) => (
+              <Image
+                source={require('./assets/icons/info.png')}
+                style={{
+                  height: 30,
+                  width: 30,
+                  tintColor: color,
+                }}
+              />
+            ),
           }}
         />
       </Tab.Navigator>

@@ -9,7 +9,10 @@ const UserSchema = mongoose.Schema({
   pass: {
     type: String,
     required: true,
-  }, 
+  },
+  dpLink: {
+    type: String,
+  },
 });
 const User = mongoose.model('User', UserSchema);
 

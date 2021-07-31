@@ -1,7 +1,9 @@
 # OSX
 #
 .DS_Store
-
+.env
+.node_modules
+.client_secret_680656392461-vjdv1h76hn5iahofr7l2ieu7p8sm3pfm.apps.googleusercontent.com.json
 # Xcode
 #
 build/
