@@ -7,15 +7,15 @@ import {
   Image,
   Button,
 } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import Header from './Header';
+import Menu from './Meals';
 import { useColorScheme } from 'react-native-appearance';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import axios from 'axios';
 
 export default function Home({ navigation, steps, setSteps, setLoggedIn }) {
   let colorScheme = useColorScheme();
-  const [img, setImg] = React.useState('');
-
 
   return (
     <View
@@ -37,11 +37,13 @@ export default function Home({ navigation, steps, setSteps, setLoggedIn }) {
           <View style={styles.circleTile}>
             <AnimatedCircularProgress
               size={110}
-              width={5}
+              width={6}
+              lineCap={'round'}
               fill={steps <= 5 ? 5 : steps}
-              tintColor="#FF8C53"
+              tintColor="#29ABE2"
               // onAnimationComplete={() => console.log('onAnimationComplete')}
-              backgroundColor="rgb(80,80,80)"
+              backgroundColor="rgba(80,80,80,0.5)"
+              backgroundWidth={13}
             />
             <Image
               source={require('../assets/icons/walk.png')}
@@ -53,11 +55,13 @@ export default function Home({ navigation, steps, setSteps, setLoggedIn }) {
           <View style={styles.circleTile}>
             <AnimatedCircularProgress
               size={110}
-              width={5}
+              width={6}
+              lineCap={'round'}
               fill={55}
-              tintColor="#FF8C53"
+              tintColor="#29ABE2"
               // onAnimationComplete={() => console.log('onAnimationComplete')}
-              backgroundColor="rgb(80,80,80)"
+              backgroundColor="rgba(80,80,80,0.5)"
+              backgroundWidth={13}
             />
             <Image
               source={require('../assets/icons/weight.png')}
@@ -67,19 +71,26 @@ export default function Home({ navigation, steps, setSteps, setLoggedIn }) {
           </View>
 
           <View style={styles.circleTile}>
-            <AnimatedCircularProgress
-              size={110}
-              width={5}
-              fill={25}
-              tintColor="#FF8C53"
-              // onAnimationComplete={() => console.log('onAnimationComplete')}
-              backgroundColor="rgb(80,80,80)"
-            />
-            <Image
-              source={require('../assets/icons/food.png')}
-              style={styles.circleIcon}
-            />
-            <Text style={styles.stepsText}>Meals</Text>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => navigation.navigate('WalkSteps')}
+            >
+              <AnimatedCircularProgress
+                size={110}
+                width={6}
+                lineCap={'round'}
+                fill={25}
+                tintColor="#29ABE2"
+                // onAnimationComplete={() => console.log('onAnimationComplete')}
+                backgroundColor="rgba(80,80,80,0.5)"
+                backgroundWidth={13}
+              />
+              <Image
+                source={require('../assets/icons/food.png')}
+                style={styles.circleIcon}
+              />
+              <Text style={styles.stepsText}>Meals</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -89,35 +100,7 @@ export default function Home({ navigation, steps, setSteps, setLoggedIn }) {
           alignItems: 'center',
           marginVertical: -100,
         }}
-      >
-        <TouchableOpacity activeOpacity={0.65}>
-          <View style={styles.tile}>
-            <Image
-              source={require('../assets/icons/leader-board.png')}
-              style={styles.icon}
-            />
-            <Text style={styles.tileText}>Check your Progress</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity activeOpacity={0.75}>
-          <View style={styles.tile}>
-            <Image source={require('../assets/icons/exer.png')} style={styles.icon} />
-            <Text style={styles.tileText}>Set your Workouts</Text>
-          </View>
-        </TouchableOpacity>
-        <Image
-          source={{
-            uri: 'https://i.imgur.com/TkIrScD.png',
-          }}
-        />
-        {/* <TouchableOpacity activeOpacity={0.75}>
-          <View style={styles.tile}>
-            <Image source={require('./icons/diary.png')} style={styles.icon} />
-            <Text style={styles.tileText}>Check your Diary</Text>
-          </View>
-        </TouchableOpacity> */}
-      </View>
+      ></View>
     </View>
   );
 }
@@ -146,7 +129,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     marginVertical: -80,
-    tintColor: '#29ABE2',
+    tintColor: 'rgb(255, 140, 83)', //rgb(41, 171, 226) //rgb(255, 140, 83)
     alignSelf: 'center',
   },
   tileText: {
@@ -159,7 +142,7 @@ const styles = StyleSheet.create({
     color: 'white',
     alignSelf: 'center',
     fontFamily: 'Comfortaa-Bold',
-    fontSize: 14,
+    fontSize: 16,
     marginVertical: 120,
   },
   icon: {

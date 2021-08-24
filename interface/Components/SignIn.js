@@ -20,7 +20,7 @@ export default function SignIn({ navigation, setLoggedIn }) {
 
   const login = async () => {
     try {
-      const URI = 'http://192.168.100.6:3001/api/login';
+      const URI = 'http://192.168.100.5:3001/api/login';
       const newUser = {
         name,
         pass,

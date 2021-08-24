@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     textAlign: 'center',
     borderRadius: 20,
+    fontFamily: 'Comfortaa-Bold',
     fontSize: 15,
   },
   status: {

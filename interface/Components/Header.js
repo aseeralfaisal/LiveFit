@@ -41,7 +41,7 @@ export default function Header({ navigation, setLoggedIn }) {
     return () => {
       initLoad();
     };
-  },[]);
+  }, []);
 
   const logout = async () => {
     setLoggedIn(false);
@@ -66,7 +66,8 @@ export default function Header({ navigation, setLoggedIn }) {
               style={styles.logo}
             />
           </View>
-          <TouchableOpacity onPress={() => setModal(true)}>
+          {/* <TouchableOpacity onPress={() => setModal(true)}> */}
+          <TouchableOpacity onPress={() => navigation.navigate('about')}>
             {/* <Image
               source={require('./icons/user.png')}
               // source={{ uri: img }}
