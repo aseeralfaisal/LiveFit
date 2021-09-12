@@ -39,9 +39,8 @@ mongoose
   .then(() => console.log('connected'))
   .catch((err) => console.log(err))
 
-app.post('/api', (req, res) => {
-  const query = req.body.query
-  res.send(query)
+app.get('/', (req, res) => {
+  res.send('Working')
 })
 app.get('/api', (req, res) => {
   res.send('API is Working')
