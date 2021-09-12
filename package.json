@@ -35,5 +35,8 @@
     "multer-gridfs-storage": "^5.0.0",
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.12"
+  },
+  "engines": {
+    "node": "14.17.5"
   }
 }

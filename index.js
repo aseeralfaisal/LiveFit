@@ -258,6 +258,6 @@ app.post('/api/getUserinfo', async (req, res) => {
   }
 })
 
-app.listen(Process.env.PORT || PORT, () => {
+app.listen(process.env.PORT || PORT, () => {
   console.log('Server is listening to ' + PORT)
 })
