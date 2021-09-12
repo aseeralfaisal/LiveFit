@@ -1,5 +1,17 @@
 import * as React from 'react'
-import { StyleSheet, View, Text, TouchableOpacity, Image, ActivityIndicator, TextInput, FlatList, ScrollView, Modal, Dimensions } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+  TextInput,
+  FlatList,
+  ScrollView,
+  Modal,
+  Dimensions,
+} from 'react-native'
 import { Modal as InsideMealDetails } from 'react-native'
 import Header from './Header'
 import { useColorScheme } from 'react-native-appearance'
@@ -11,6 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function Meals({ navigation }) {
   let colorScheme = useColorScheme()
+  const screenWidth = Dimensions.get('window').width
 
   const [nutrients, setNutrients] = React.useState('')
   const [totalCal, setTotalCal] = React.useState('')
@@ -22,6 +35,20 @@ export default function Meals({ navigation }) {
   const [modal, setModal] = React.useState(false)
   const [mealDetailModal, setMealDetailModal] = React.useState(false)
   const [foodMenu, setFoodMenu] = React.useState(false)
+  const [todaysTime, setTodaysTime] = React.useState(null)
+
+  const getTodaysDate = () => {
+    const date = new Date()
+    const currentDate = date.getDate()
+    const currentMonth = date.getMonth()
+    const currentYear = date.getFullYear()
+    setTodaysTime(currentDate + '-' + currentMonth + '-' + currentYear)
+    console.log('today ' + todaysTime)
+  }
+  React.useEffect(() => {
+    getTodaysDate()
+    return () => getTodaysDate()
+  })
 
   const ipAddress = '192.168.100.5:3001'
 
@@ -41,7 +68,7 @@ export default function Meals({ navigation }) {
 
   const getTodaysMeals = async () => {
     const out = await axios.get('http://' + ipAddress + '/api/findTodaysMeals')
-    setTodaysMeals([out.data])
+    setTodaysMeals(out.data)
   }
 
   React.useEffect(() => {
@@ -50,6 +77,7 @@ export default function Meals({ navigation }) {
 
   React.useEffect(() => {
     getTodaysMeals()
+    return () => getTodaysMeals()
   }, [])
 
   React.useEffect(() => {
@@ -57,19 +85,20 @@ export default function Meals({ navigation }) {
     return () => getMealsfromServer()
   }, [])
 
-  const addMeals = (name, serve, carbs, protein, fats, calories) => {
-    const items = { name, serve, carbs, protein, fats, calories }
-    setFoodItems([...foodItems, items])
-    console.log(foodItems)
-    setFoodMenu(false)
-  }
-
   const addItemToDB = async () => {
     const Items = { mealName, foodItems }
     const res = await axios.post('http://' + ipAddress + '/api/saveInfoToDB', Items)
     setModal(false)
     console.log(res.data)
     getMealsfromServer()
+    getTodaysMeals()
+  }
+
+  const addMeals = (name, serve, carbs, protein, fats, calories) => {
+    const items = { name, serve, carbs, protein, fats, calories }
+    setFoodItems([...foodItems, items])
+    console.log(foodItems)
+    setFoodMenu(false)
   }
 
   const getCals = async (text) => {
@@ -97,161 +126,158 @@ export default function Meals({ navigation }) {
     setMealDetailModal(true)
   }
 
+  const data = {
+    labels: ['DBY', 'Yesterday', 'Today'],
+    datasets: [
+      {
+        data: [1200, 1600, 1500],
+        color: (opacity = 1) => `rgba(80,120,200,${opacity})`, // optional
+        strokeWidth: 2.5, // optional
+      },
+    ],
+    // legend: ['Rainy Days'], // optional
+  }
+
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: colorScheme === 'dark' ? 'rgb(30, 30, 30)' : 'rgb(30,30,30)',
-      }}
-    >
-      {/* <ScrollView> */}
+        backgroundColor: '#ffffff',
+      }}>
       <Header navigation={navigation} />
-      <View style={styles.circleContainer}>
-        <AnimatedCircularProgress
-          size={240}
-          width={8}
-          fill={60}
-          tintColor="#29ABE2"
-          lineCap={'round'}
-          backgroundColor="rgba(80,80,80,0.4)"
-          backgroundWidth={16}
-          style={{
-            marginBottom: -220,
-          }}
-        />
-
-        <View>
-          <Image style={styles.inCircle} source={require('../assets/icons/calories.png')} />
-          <Text style={styles.calText}>{totalCal}</Text>
+      {
+        <View style={{ marginHorizontal: 10 }}>
+          <LineChart
+            data={data}
+            width={screenWidth - 50}
+            height={220}
+            chartConfig={{
+              backgroundColor: '#fff',
+              backgroundGradientFrom: '#fff',
+              backgroundGradientTo: '#fff',
+              decimalPlaces: 0, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              style: {
+                borderRadius: 16,
+                marginLeft: 30,
+              },
+              propsForDots: {
+                r: '6',
+                strokeWidth: '2',
+                stroke: 'rgb(80,120,200)',
+              },
+            }}
+            bezier={true}
+          />
         </View>
+      }
 
-        <AnimatedCircularProgress size={200} width={6} fill={60} tintColor="#FF8C53" lineCap={'round'} backgroundColor="rgba(80,80,80,0.4)" backgroundWidth={16} />
-      </View>
-      <View style={{ alignSelf: 'center', marginTop: 30 }}>
-        <View style={{ alignSelf: 'center', marginTop: 20, flexDirection: 'row' }}>
-          <Text style={[styles.text, { color: '#FF8C53', marginHorizontal: 5 }]}>Food: 500</Text>
-          <Text style={[styles.text, { color: '#FF8C53', marginHorizontal: 5 }]}>Remaining: 1500</Text>
-        </View>
-      </View>
-      <TouchableOpacity style={[styles.btnSearchfood, { marginTop: 20 }]} onPress={() => setModal(true)}>
-        <Text style={styles.btnText}>Add a meal</Text>
+      <TouchableOpacity activeOpacity={0.7} style={[styles.tile, { marginTop: 40 }]} onPress={() => setModal(true)}>
+        <Image source={require('../assets/icons/calories.png')} style={styles.tileMenuIcon} />
+        <Text style={styles.tileText}>Add calories</Text>
       </TouchableOpacity>
-      {/* Meal details */}
+
+      {/* {todaysMeals && ( */}
       <FlatList
-        data={todaysMeals}
+        data={meals}
         renderItem={({ item }) => (
           <TouchableOpacity
-            style={styles.meals}
+            // style={[styles.meals]}
             onPress={() => {
               insideMealDetail(item)
-            }}
-          >
+            }}>
             <Text
               style={{
                 fontSize: 16,
-                color: 'white',
-                fontFamily: 'Comfortaa-Bold',
-              }}
-            >
+                color: '#000',
+                display: item.time == todaysTime ? 'flex' : 'none',
+              }}>
               {item.mealName} {item.time}
-            </Text>
-
-            <Text
-              style={{
-                fontSize: 16,
-                color: 'white',
-                fontFamily: 'Comfortaa-Bold',
-              }}
-            >
-              {item.calories}
             </Text>
           </TouchableOpacity>
         )}
-        keyExtractor={(item, idx) => item._id}
+        keyExtractor={(item, idx) => idx.toString()}
       />
+      {/* )} */}
       <InsideMealDetails
-        animationType="slide"
+        animationType='slide'
         transparent={true}
         visible={mealDetailModal}
         onRequestClose={() => {
           setMealDetailModal(false)
-        }}
-      >
+        }}>
         <View
           style={{
             backgroundColor: 'rgba(10,10,10,0.92)',
             height: '100%',
             width: '100%',
-          }}
-        >
-          <Text style={[styles.text, { alignSelf: 'center' }]}>{mealDetailName}</Text>
-          {/* <Text style={[styles.text, { alignSelf: 'center' }]}>{mealDetailCals}</Text> */}
+          }}>
+          <Text style={[styles.text, { alignSelf: 'center', color: '#FF8C53', marginBottom: 30 }]}>{mealDetailName}</Text>
 
-          <FlatList
-            data={mealDetailCals}
-            renderItem={({ item }) => (
-              <Text
-                style={{
-                  fontSize: 16,
-                  color: 'white',
-                  fontFamily: 'Comfortaa-Bold',
-                  flexDirection: 'row',
-                }}
-              >
-                {item.name} {item.calories}
-              </Text>
-            )}
-            keyExtractor={(item, idx) => idx}
-          />
+          {mealDetailCals ? (
+            <FlatList
+              data={mealDetailCals}
+              renderItem={({ item }) => (
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: 'white',
+                    flexDirection: 'row',
+                    alignSelf: 'center',
+                    textTransform: 'capitalize',
+                  }}>
+                  {item.name} {item.calories} cals
+                </Text>
+              )}
+              keyExtractor={(item, idx) => idx}
+            />
+          ) : (
+            <View></View>
+          )}
         </View>
       </InsideMealDetails>
       <Modal
-        animationType="slide"
+        animationType='slide'
         transparent={true}
         visible={modal}
         onRequestClose={() => {
           setModal(false)
-        }}
-      >
+        }}>
         <View
           style={{
-            backgroundColor: 'rgba(10,10,10,0.92)',
+            backgroundColor: '#fff',
             height: '100%',
             width: '100%',
-          }}
-        >
+          }}>
           <View style={{ marginTop: 20, alignItems: 'center' }}>
-            <TextInput placeholder="Meal name" placeholderTextColor="gray" value={mealName} onChangeText={(text) => setMealName(text)} style={styles.inputField2} />
+            <TextInput
+              placeholder='Meal name'
+              placeholderTextColor='gray'
+              value={mealName}
+              onChangeText={(text) => setMealName(text)}
+              style={styles.inputField2}
+            />
           </View>
 
           <View style={{ marginVertical: 20, alignItems: 'center' }}>
-            <Text
+            {/* <Text
               style={{
                 color: '#FF8C53',
                 textTransform: 'capitalize',
-                alignSelf: 'flex-start',
+                alignSelf: 'center',
                 marginHorizontal: 32,
                 fontSize: 30,
                 letterSpacing: 3,
-                fontFamily: 'Comfortaa-Bold',
                 marginVertical: 7,
-              }}
-            >
+              }}>
               Meals
-            </Text>
+            </Text> */}
+
             <FlatList
               data={foodItems}
               renderItem={({ item }) => (
-                <Text
-                  style={{
-                    color: '#FF8C53',
-                    textTransform: 'capitalize',
-                    alignSelf: 'flex-start',
-                    fontFamily: 'Comfortaa-Bold',
-                    fontSize: 18,
-                    marginVertical: 7,
-                  }}
-                >
+                <Text style={styles.mealDetails}>
                   {item.name} {'->'} {item.serve + 'g' + ' '} {item.carbs + 'g' + ' '}
                   {item.protein + 'g' + ' '}
                   {item.fats + 'g' + ' '}
@@ -261,51 +287,46 @@ export default function Meals({ navigation }) {
             />
           </View>
 
-          <TouchableOpacity onPress={() => setFoodMenu(true)}>
-            <Text
-              style={[
-                styles.btnSearchfood,
-                {
-                  color: 'white',
-                  textAlign: 'center',
-                  fontFamily: 'Comfortaa-Bold',
-                },
-              ]}
-            >
-              Search food items
-            </Text>
+          <TouchableOpacity activeOpacity={0.7} style={styles.tile} onPress={() => setFoodMenu(true)}>
+            <Image source={require('../assets/icons/search.png')} style={styles.tileMenuIcon} />
+            <Text style={styles.tileText}>Search food items</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => addItemToDB()}>
-            <Text
-              style={[
-                styles.btnSearchfood,
-                {
-                  color: 'white',
-                  textAlign: 'center',
-                  fontFamily: 'Comfortaa-Bold',
-                  marginVertical: 10,
-                },
-              ]}
-            >
-              Save to DB
-            </Text>
+          <TouchableOpacity activeOpacity={0.7} style={styles.tile} onPress={() => addItemToDB()}>
+            <Image source={require('../assets/icons/add.png')} style={styles.tileMenuIcon} />
+            <Text style={styles.tileText}>Add to your routine</Text>
           </TouchableOpacity>
 
-          <Modal animationType="none" transparent={true} visible={foodMenu} onRequestClose={() => setFoodMenu(false)}>
+          <Modal
+            animationType='none'
+            transparent={true}
+            visible={foodMenu}
+            onRequestClose={() => {
+              setFoodMenu(false)
+              setNutrients(false)
+            }}>
             <View style={styles.modal2}>
               <TextInput
-                placeholder="Search foods..."
-                placeholderTextColor="rgb(150,150,150)"
+                placeholder='Search foods...'
+                placeholderTextColor='rgba(80,80,80,0.8)'
                 onChangeText={(val) => {
                   setLoader(false)
                   setNutrients('')
                 }}
                 onSubmitEditing={(event) => getCals(event.nativeEvent.text)}
-                style={styles.inputField}
+                style={styles.inputField2}
               />
+              {!nutrients && (
+                <View style={{ alignItems: 'center' }}>
+                  <Image
+                    source={require('../assets/icons/search_logo.png')}
+                    style={[styles.tileMenuIcon, { tintColor: 'rgba(80,120,200,0.3)', height: 144, width: 200, marginTop: 50 }]}
+                  />
+                  <Text style={[styles.text, { fontSize: 30, marginTop: 30, color: 'rgba(80,120,200,0.3)' }]}>Search food items</Text>
+                </View>
+              )}
 
-              <ActivityIndicator size={140} color="#FF8C53" style={{ display: loader ? 'flex' : 'none', marginTop: 40 }} />
+              <ActivityIndicator size={140} color='#FF8C53' style={{ display: loader ? 'flex' : 'none', marginTop: 40 }} />
 
               <View style={nutrients ? styles.calorieChart : styles.calorieChart_none}>
                 <Text style={styles.foodName}>{nutrients.name}</Text>
@@ -313,8 +334,7 @@ export default function Meals({ navigation }) {
                 <View
                   style={{
                     display: nutrients.name === 'Nothing Found!!!' ? 'none' : 'flex',
-                  }}
-                >
+                  }}>
                   <Text style={styles.text}>Serving size: {nutrients.serving_size_g} gm</Text>
                   <Text style={styles.text}>Carbohydrates: {nutrients.carbohydrates_total_g} gm</Text>
                   <Text style={styles.text}>Protein: {nutrients.protein_g} gm</Text>
@@ -323,8 +343,16 @@ export default function Meals({ navigation }) {
                   <TouchableOpacity
                     activeOpacity={0.5}
                     style={styles.btn}
-                    onPress={() => addMeals(nutrients.name, nutrients.serving_size_g, nutrients.carbohydrates_total_g, nutrients.protein_g, nutrients.fat_total_g, nutrients.calories)}
-                  >
+                    onPress={() =>
+                      addMeals(
+                        nutrients.name,
+                        nutrients.serving_size_g,
+                        nutrients.carbohydrates_total_g,
+                        nutrients.protein_g,
+                        nutrients.fat_total_g,
+                        nutrients.calories
+                      )
+                    }>
                     <Text style={styles.btnText}>Add item </Text>
                   </TouchableOpacity>
                 </View>
@@ -349,7 +377,6 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     color: 'white',
     // alignSelf: 'flex-end',
-    fontFamily: 'Comfortaa-Bold',
     fontSize: 20,
     color: 'white', //#FF8C53
   },
@@ -358,17 +385,45 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
+  tile: {
+    borderRadius: 25,
+    backgroundColor: 'rgb(80,120,200)',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 5,
+    width: 280,
+    padding: 4,
+    alignSelf: 'center',
+  },
+  tileText: {
+    color: '#fff',
+    alignSelf: 'center',
+    fontSize: 16,
+  },
+  tileMenuIcon: {
+    height: 35,
+    width: 35,
+    marginHorizontal: 5,
+  },
   inputField2: {
     marginVertical: 10,
-    color: 'white',
+    color: 'rgb(80,80,80)',
     borderBottomWidth: 2,
-    borderColor: 'rgb(80,80,80)',
+    borderColor: 'rgba(80,80,80,0.3)',
     textAlign: 'center',
-    fontFamily: 'Comfortaa-Bold',
     fontSize: 16,
-    width: 300,
     height: 45,
+    width: '70%',
     alignSelf: 'center',
+    fontWeight: 'normal',
+    ...Platform.select({
+      ios: {
+        fontFamily: 'Comfortaa-Bold',
+      },
+      android: {
+        fontFamily: 'Comfortaa-Bold',
+      },
+    }),
   },
   modal: {
     alignItems: 'center',
@@ -378,7 +433,7 @@ const styles = StyleSheet.create({
   },
   modal2: {
     alignItems: 'center',
-    backgroundColor: 'rgba(10,10,10,0.85)',
+    backgroundColor: '#fff',
     height: '100%',
     width: '100%',
   },
@@ -387,37 +442,52 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: -60,
   },
+  circleIcon: {
+    width: 50,
+    height: 50,
+    marginVertical: -80,
+    tintColor: 'rgb(80,80,80)', //rgb(41, 171, 226) //rgb(255, 140, 83)
+    alignSelf: 'center',
+  },
   inCircle: {
     position: 'absolute',
     width: 75,
     height: 75,
     marginTop: 40,
     alignSelf: 'center',
-    tintColor: '#FF8C53',
+    tintColor: 'rgb(80,80,80)',
   },
   calText: {
-    color: 'rgb(255, 140, 83)',
-    fontFamily: 'Comfortaa-Bold',
+    color: 'rgb(80,80,80)',
     fontSize: 35,
     position: 'absolute',
     paddingTop: 110,
     alignSelf: 'center',
-    fontFamily: 'Comfortaa-Bold',
   },
   foodName: {
     color: '#FF8C53',
     alignSelf: 'flex-start',
-    fontFamily: 'Comfortaa-Bold',
     fontSize: 40,
     letterSpacing: 4,
     textTransform: 'capitalize',
     marginBottom: 10,
+    fontFamily: 'Comfortaa-Bold',
   },
   text: {
+    color: '#fff',
+    alignSelf: 'flex-start',
+    fontSize: 18,
+  },
+  text: {
+    color: 'rgb(80,80,80)',
+    alignSelf: 'flex-start',
+    fontSize: 18,
+  },
+  tableText: {
+    paddingHorizontal: 10,
     color: 'white',
     alignSelf: 'flex-start',
-    fontFamily: 'Comfortaa-Bold',
-    fontSize: 18,
+    fontSize: 15,
   },
   inputField: {
     marginTop: 80,
@@ -425,24 +495,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(80,80,80)',
     textAlign: 'center',
     borderRadius: 20,
-    fontFamily: 'Comfortaa-Bold',
     fontSize: 16,
     width: 320,
     height: 45,
   },
   meals: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     marginVertical: 10,
     backgroundColor: 'rgb(80,80,80)',
     marginHorizontal: 40,
     borderRadius: 20,
     padding: 10,
-    width: 320,
   },
   calorieChart: {
     marginVertical: 25,
-    backgroundColor: 'rgb(80,80,80)',
+    backgroundColor: 'rgba(80,120,200,0.2)',
     marginHorizontal: 40,
     borderRadius: 20,
     padding: 20,
@@ -458,16 +526,24 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   btnSearchfood: {
-    // marginTop: 60,
     paddingVertical: 10,
     backgroundColor: '#29ABE2', //#29ABE2 //#FF8C53
     borderRadius: 20,
     marginHorizontal: 40,
   },
+  mealDetails: {
+    textTransform: 'capitalize',
+    alignSelf: 'flex-start',
+    marginVertical: 7,
+    paddingVertical: 10,
+    color: 'white',
+    borderRadius: 20,
+    paddingHorizontal: 50,
+    backgroundColor: 'rgba(100,100,100,0.5)',
+  },
   btnText: {
     color: 'white',
     alignSelf: 'center',
-    fontFamily: 'Comfortaa-Bold',
     fontSize: 15,
   },
 })

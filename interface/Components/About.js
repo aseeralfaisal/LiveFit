@@ -1,128 +1,113 @@
-import * as React from 'react';
-import {
-  StyleSheet,
-  View,
-  TextInput,
-  Text,
-  ActivityIndicator,
-  Image,
-  TouchableOpacity,
-  Modal,
-} from 'react-native';
-import Header from './Header';
-import { useColorScheme } from 'react-native-appearance';
-import * as ImagePicker from 'expo-image-picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import ImageResizeMode from 'react-native/Libraries/Image/ImageResizeMode';
-import uuid from 'uuid';
-import { db, storage } from './Firebase';
-import { BlurView } from 'expo-blur';
-import axios from 'axios';
+import * as React from 'react'
+import { StyleSheet, View, TextInput, Text, ActivityIndicator, Image, TouchableOpacity, Modal } from 'react-native'
+import Header from './Header'
+import { useColorScheme } from 'react-native-appearance'
+import * as ImagePicker from 'expo-image-picker'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import ImageResizeMode from 'react-native/Libraries/Image/ImageResizeMode'
+import uuid from 'uuid'
+import { db, storage } from './Firebase'
+import { BlurView } from 'expo-blur'
+import axios from 'axios'
 
 export default function About({ navigation }) {
-  let colorScheme = useColorScheme();
-  const [loader, setLoader] = React.useState(false);
-  const [user, setUser] = React.useState('');
-  const [img, setImg] = React.useState(null);
-  const [modal, setModal] = React.useState(false);
+  let colorScheme = useColorScheme()
+  const [loader, setLoader] = React.useState(false)
+  const [user, setUser] = React.useState('')
+  const [img, setImg] = React.useState(null)
+  const [modal, setModal] = React.useState(false)
 
-  const [dailyGoal, setDailyGoal] = React.useState('');
-  const [bodyweight, setBodyweight] = React.useState('');
-  const [bodyfat, setBodyFat] = React.useState('');
-  const [height, setHeight] = React.useState('');
+  const [dailyGoal, setDailyGoal] = React.useState('')
+  const [bodyweight, setBodyweight] = React.useState('')
+  const [bodyfat, setBodyFat] = React.useState('')
+  const [height, setHeight] = React.useState('')
 
   const initLoad = async () => {
     try {
-      const username = await AsyncStorage.getItem('username');
-      setUser(username);
+      const username = await AsyncStorage.getItem('username')
+      setUser(username)
       db.collection('users')
         .doc(username)
         .onSnapshot((snap) => {
-          setImg(snap.data().dpLink);
-        });
+          setImg(snap.data().dpLink)
+        })
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   React.useEffect(() => {
-    initLoad();
-    return () => initLoad();
-  }, []);
+    initLoad()
+    return () => initLoad()
+  }, [])
 
   const getInfofromServer = async () => {
-    const name = await AsyncStorage.getItem('username');
+    const name = await AsyncStorage.getItem('username')
     const user = {
       name,
-    };
-    const out = await axios.post(
-      'http://192.168.100.6:3001/api/getUserinfo',
-      user
-    );
-    setDailyGoal(out.data.dailyGoal);
-    setBodyweight(out.data.bodyweight);
-    setBodyFat(out.data.bodyfat);
-    setHeight(out.data.height);
-    console.log(out.data);
-  };
+    }
+    const out = await axios.post('http://192.168.100.5:3001/api/getUserinfo', user)
+    setDailyGoal(out.data.dailyGoal)
+    setBodyweight(out.data.bodyweight)
+    setBodyFat(out.data.bodyfat)
+    setHeight(out.data.height)
+    console.log(out.data)
+  }
 
   React.useEffect(() => {
-    getInfofromServer();
-    return () => getInfofromServer();
-  }, []);
+    getInfofromServer()
+    return () => getInfofromServer()
+  }, [])
 
   const showImagePicker = async () => {
     try {
-      const permissionResult =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
 
       if (permissionResult.granted === false) {
-        alert("You've refused to allow this app to access your photos!");
-        return;
+        alert("You've refused to allow this app to access your photos!")
+        return
       }
-      setModal(false);
-      setLoader(true);
+      setModal(false)
+      setLoader(true)
 
-      const pickerResult = await ImagePicker.launchImageLibraryAsync();
+      const pickerResult = await ImagePicker.launchImageLibraryAsync()
 
-      const imgLink = await uploadImage(pickerResult.uri);
+      const imgLink = await uploadImage(pickerResult.uri)
       db.collection('users').doc(user).set({
         dpLink: imgLink,
-      });
+      })
 
-      setImg(imgLink);
-      setLoader(false);
+      setImg(imgLink)
+      setLoader(false)
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   async function uploadImage(uri) {
     try {
-      // https://github.com/expo/expo/issues/2402#issuecomment-443726662
-
       const blob = await new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest()
         xhr.onload = function () {
-          resolve(xhr.response);
-        };
+          resolve(xhr.response)
+        }
         xhr.onerror = function (e) {
-          console.log(e);
-          reject(new TypeError('Network request failed'));
-        };
-        xhr.responseType = 'blob';
-        xhr.open('GET', uri, true);
-        xhr.send(null);
-      });
+          console.log(e)
+          reject(new TypeError('Network request failed'))
+        }
+        xhr.responseType = 'blob'
+        xhr.open('GET', uri, true)
+        xhr.send(null)
+      })
       // console.log(uri);
-      const ref = storage.ref().child('img/' + user);
-      const snapshot = await ref.put(blob);
+      const ref = storage.ref().child('img/' + user)
+      const snapshot = await ref.put(blob)
 
-      blob.close();
+      blob.close()
 
-      return await snapshot.ref.getDownloadURL();
+      return await snapshot.ref.getDownloadURL()
     } catch (err) {
-      console.log('error occured');
+      console.log('error occured')
     }
   }
 
@@ -133,148 +118,97 @@ export default function About({ navigation }) {
       bodyfat,
       bodyweight,
       height,
-    };
-    const out = await axios.post(
-      'http://192.168.100.6:3001/api/userinfo',
-      userInfo
-    );
-    console.log(out.data);
-    setModal(false);
-  };
+    }
+    const out = await axios.post('http://192.168.100.5:3001/api/userinfo', userInfo)
+    console.log(out.data)
+    setModal(false)
+  }
 
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor:
-          colorScheme === 'dark' ? 'rgb(30, 30, 30)' : 'rgb(30,30,30)',
-      }}
-    >
+        backgroundColor: '#ffffff',
+      }}>
       <Header navigation={navigation} />
       <View style={styles.profile}>
-        <Image
-          source={{ uri: img }}
-          resizeMode={ImageResizeMode.contain}
-          style={styles.logo}
-        />
+        <Image source={{ uri: img }} resizeMode={ImageResizeMode.contain} style={styles.logo} />
       </View>
       <Text style={styles.nameText}>{user}</Text>
 
-      <TouchableOpacity
-        style={[styles.btnOpacity, { backgroundColor: 'rgb(80,80,80)' }]}
-        onPress={() => setModal(true)}
-        activeOpacity={0.6}
-      >
-        <Image
-          source={require('../assets/icons/edit.png')}
-          style={{ height: 25, width: 25, marginHorizontal: 5 }}
-        />
-        <Text style={[styles.text, { marginHorizontal: 5 }]}>Edit Info</Text>
+      <TouchableOpacity activeOpacity={0.7} style={styles.tile} onPress={() => setModal(true)}>
+        <Image source={require('../assets/icons/edit.png')} style={styles.tileMenuIcon} />
+        <Text style={styles.tileText}>Edit Info</Text>
       </TouchableOpacity>
 
-      <View style={{ marginHorizontal: 60 }}>
+      <View style={{ marginHorizontal: 60, alignSelf: 'center' }}>
         <View style={styles.infoIcons}>
-          <Image
-            source={require('../assets/icons/calories.png')}
-            style={styles.InfoIconsOnly}
-          />
+          <Image source={require('../assets/icons/calories.png')} style={styles.InfoIconsOnly} />
           <Text style={styles.aboutInfoText}>Calorie goal: {dailyGoal}cal</Text>
         </View>
 
-        <View style={styles.bar}></View>
-
         <View style={styles.infoIcons}>
-          <Image
-            source={require('../assets/icons/weight.png')}
-            style={styles.InfoIconsOnly}
-          />
+          <Image source={require('../assets/icons/weight.png')} style={styles.InfoIconsOnly} />
           <Text style={styles.aboutInfoText}>Bodyweight: {bodyweight}kg</Text>
         </View>
 
-        <View style={styles.bar}></View>
-
         <View style={styles.infoIcons}>
-          <Image
-            source={require('../assets/icons/body.png')}
-            style={styles.InfoIconsOnly}
-          />
+          <Image source={require('../assets/icons/body.png')} style={styles.InfoIconsOnly} />
           <Text style={styles.aboutInfoText}>BF Percentage: {bodyfat}</Text>
         </View>
-        <View style={styles.bar}></View>
         <View style={styles.infoIcons}>
-          <Image
-            source={require('../assets/icons/height.png')}
-            style={styles.InfoIconsOnly}
-          />
+          <Image source={require('../assets/icons/height.png')} style={styles.InfoIconsOnly} />
           <Text style={styles.aboutInfoText}>Height: {height}m</Text>
         </View>
-        <View style={styles.bar}></View>
       </View>
 
       <Modal
-        animationType="slide"
+        animationType='slide'
         transparent={true}
         visible={modal}
         onRequestClose={() => {
-          setModal(false);
-        }}
-      >
+          setModal(false)
+        }}>
         <View
           style={{
-            backgroundColor: 'rgba(10,10,10,0.9)',
+            backgroundColor: '#fff',
             width: '100%',
             height: '100%',
-          }}
-        >
+          }}>
           <View style={[styles.profile, { marginTop: 50 }]}>
-            <Image
-              source={{ uri: img }}
-              resizeMode={ImageResizeMode.contain}
-              style={styles.logo}
-            />
+            <Image source={{ uri: img }} resizeMode={ImageResizeMode.contain} style={styles.logo} />
           </View>
-          <Text style={[styles.nameText, { marginTop: 50, marginBottom: -20 }]}>
-            {user}
-          </Text>
-          <TouchableOpacity
-            style={[styles.btnOpacity, { marginTop: 50, marginBottom: -60 }]}
-            onPress={showImagePicker}
-            activeOpacity={0.6}
-          >
-            <Image
-              source={require('../assets/icons/user.png')}
-              style={{ height: 25, width: 25, marginHorizontal: 5 }}
-            />
-            <Text style={[styles.text, { marginHorizontal: 5 }]}>
-              Change profile
-            </Text>
+          <Text style={[styles.nameText, { marginTop: 50, marginBottom: -20 }]}>{user}</Text>
+          <TouchableOpacity activeOpacity={0.7} style={[styles.tile, { marginTop: 40, marginBottom: -40 }]} onPress={showImagePicker}>
+            <Image source={require('../assets/icons/user.png')} style={styles.tileMenuIcon} />
+            <Text style={styles.tileText}>Change profile</Text>
           </TouchableOpacity>
 
           <View style={{ marginTop: 60 }}>
             <TextInput
-              placeholder="Daily calorie goal"
-              placeholderTextColor="gray"
+              placeholder='Daily calorie goal'
+              placeholderTextColor='gray'
               value={dailyGoal}
               onChangeText={(text) => setDailyGoal(text)}
               style={styles.inputField}
             />
             <TextInput
-              placeholder="Height"
-              placeholderTextColor="gray"
+              placeholder='Height'
+              placeholderTextColor='gray'
               value={height}
               onChangeText={(text) => setHeight(text)}
               style={styles.inputField}
             />
             <TextInput
-              placeholder="Bodyweight"
-              placeholderTextColor="gray"
+              placeholder='Bodyweight'
+              placeholderTextColor='gray'
               value={bodyweight}
               onChangeText={(text) => setBodyweight(text)}
               style={styles.inputField}
             />
             <TextInput
-              placeholder="Bodyfat"
-              placeholderTextColor="gray"
+              placeholder='Bodyfat'
+              placeholderTextColor='gray'
               value={bodyfat}
               onChangeText={(text) => setBodyFat(text)}
               style={styles.inputField}
@@ -282,71 +216,82 @@ export default function About({ navigation }) {
           </View>
 
           <TouchableOpacity
-            style={[
-              styles.btnOpacity,
-              { marginTop: 10, backgroundColor: 'rgb(80, 80, 80)' },
-            ]}
+            style={[styles.btnOpacity, { marginTop: 10, backgroundColor: 'rgb(80, 80, 80)' }]}
             onPress={postInfo}
-            activeOpacity={0.6}
-          >
-            <Image
-              source={require('../assets/icons/save.png')}
-              style={{ height: 25, width: 25, marginHorizontal: 5 }}
-            />
-            <Text style={[styles.text, { marginHorizontal: 5 }]}>
-              Save Info
-            </Text>
+            activeOpacity={0.6}>
+            <Image source={require('../assets/icons/save.png')} style={{ height: 25, width: 25, marginHorizontal: 5 }} />
+            <Text style={[styles.text, { marginHorizontal: 5 }]}>Save Info</Text>
           </TouchableOpacity>
         </View>
       </Modal>
 
       <View style={styles.activityIndicator}>
-        <ActivityIndicator
-          size={150}
-          color="#29ABE2"
-          style={{ display: loader ? 'flex' : 'none' }}
-        />
+        <ActivityIndicator size={150} color='#29ABE2' style={{ display: loader ? 'flex' : 'none' }} />
       </View>
     </View>
-  );
+  )
 }
 const styles = StyleSheet.create({
   infoIcons: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    borderBottomColor: 'rgba(80,80,80,0.3)',
+    borderBottomWidth: 2,
   },
   InfoIconsOnly: {
     width: 35,
     height: 35,
     marginHorizontal: 5,
-    tintColor: '#FF8C53',
+    tintColor: 'rgb(80,80,80)',
   },
-  bar: {
-    backgroundColor: 'rgb(80,80,80)', //#29ABE2
-    width: 270,
+  tile: {
     borderRadius: 25,
-    height: 5,
+    backgroundColor: 'rgb(80,120,200)',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 5,
+    width: 280,
+    padding: 4,
+    alignSelf: 'center',
+  },
+  tileText: {
+    color: '#fff',
+    alignSelf: 'center',
+    fontFamily: 'Comfortaa-Bold',
+    fontSize: 16,
+  },
+  tileMenuIcon: {
+    height: 35,
+    width: 35,
+    marginHorizontal: 5,
   },
   inputField: {
     marginVertical: 10,
-    color: 'white',
+    color: 'rgba(80,80,80,0.85)',
     borderBottomWidth: 2,
-    borderColor: 'rgb(80,80,80)',
+    borderColor: 'rgba(80,80,80,0.3)',
     textAlign: 'center',
     fontFamily: 'Comfortaa-Bold',
-    fontSize: 16,
-    width: 300,
+    fontSize: 18,
     height: 45,
+    width: '70%',
     alignSelf: 'center',
+    ...Platform.select({
+      ios: {
+        fontFamily: 'Comfortaa-Bold',
+      },
+      android: {
+        fontFamily: 'Comfortaa-Bold',
+      },
+    }),
   },
   aboutInfoText: {
     marginVertical: 15,
-    color: 'white',
     // alignSelf: 'flex-end',
     fontFamily: 'Comfortaa-Bold',
     fontSize: 20,
-    color: 'white', //#FF8C53
+    color: 'rgb(80,80,80)', //#FF8C53
   },
   modal: {
     alignItems: 'center',
@@ -377,14 +322,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 50,
     borderRadius: 50,
-    backgroundColor: '#29ABE2',
+    backgroundColor: 'rgb(80,120,200)',
     padding: 8,
   },
   nameText: {
     marginTop: 25,
     fontSize: 30,
     textTransform: 'capitalize',
-    color: '#1ABDFF',
+    color: 'rgb(80,120,200)',
     textAlign: 'center',
     fontFamily: 'Comfortaa-Bold',
     marginBottom: 25,
@@ -394,4 +339,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Comfortaa-Bold',
   },
-});
+})

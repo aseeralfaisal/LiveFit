@@ -19,18 +19,6 @@ admin.initializeApp({
 })
 
 const firestore = admin.firestore()
-// const { GridFsStorage } = require('multer-gridfs-storage');
-// const Grid = require('gridfs-stream');
-// const Grid = require('gridfs-bucket');
-
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, './uploads');
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, file.originalname);
-//   },
-// });
 
 const PORT = 3001
 
@@ -50,32 +38,6 @@ mongoose
   })
   .then(() => console.log('connected'))
   .catch((err) => console.log(err))
-
-// let gfs;
-
-// conn.once('open', () => {
-//   gfs = Grid(conn.db, mongoose.mongo);
-//   gfs.collection('users');
-// });
-
-// const storage = new GridFsStorage({
-//   url: process.env.DB,
-//   file: (req, file) => {
-//     return new Promise((resolve, reject) => {
-//       const fileInfo = {
-//         filename: file.originalname,
-//         bucketName: 'users',
-//       };
-//       resolve(fileInfo);
-//     });
-//   },
-// });
-// const upload = multer({ storage });
-
-// app.post('/upload', upload.single('file'), (req, res) => {
-//   res.json({ file: req.file });
-//   console.log(req.file);
-// });
 
 app.post('/api', (req, res) => {
   const query = req.body.query
@@ -296,6 +258,6 @@ app.post('/api/getUserinfo', async (req, res) => {
   }
 })
 
-app.listen(PORT, () => {
+app.listen(Process.env.PORT || PORT, () => {
   console.log('Server is listening to ' + PORT)
 })

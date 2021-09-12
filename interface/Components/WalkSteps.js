@@ -1,50 +1,37 @@
-import * as React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Button,
-} from 'react-native';
-import { useState, useEffect } from 'react';
-import { Pedometer } from 'expo-sensors';
-import Header from './Header';
-import { useColorScheme } from 'react-native-appearance';
-import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import * as React from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native'
+import { useState, useEffect } from 'react'
+import { Pedometer } from 'expo-sensors'
+import Header from './Header'
+import { useColorScheme } from 'react-native-appearance'
+import { AnimatedCircularProgress } from 'react-native-circular-progress'
 
 export default function WalkSteps({ navigation, steps, setSteps }) {
-  let colorScheme = useColorScheme();
+  let colorScheme = useColorScheme()
   // const [steps, setSteps] = useState(0);
 
   useEffect(() => {
-    Pedometer.watchStepCount((PedometerResult) =>
-      setSteps(PedometerResult.steps)
-    );
+    Pedometer.watchStepCount((PedometerResult) => setSteps(PedometerResult.steps))
     return () => {
-      Pedometer.watchStepCount((PedometerResult) =>
-        setSteps(PedometerResult.steps)
-      ).remove();
-    };
-  });
+      Pedometer.watchStepCount((PedometerResult) => setSteps(PedometerResult.steps)).remove()
+    }
+  })
 
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor:
-          colorScheme === 'dark' ? 'rgb(30, 30, 30)' : 'rgb(30,30,30)',
-      }}
-    >
+        backgroundColor: '#ffffff',
+      }}>
       <Header navigation={navigation} />
       <View style={styles.circleContainer}>
         <AnimatedCircularProgress
           size={250}
           width={15}
           fill={steps <= 5 ? 5 : steps}
-          tintColor="#29ABE2"
+          tintColor='#29ABE2'
           // onAnimationComplete={() => console.log('onAnimationComplete')}
-          backgroundColor="rgb(80,80,80)"
+          backgroundColor='rgba(80,80,80,0.3)'
           style={{
             marginVertical: -225,
           }}
@@ -53,20 +40,20 @@ export default function WalkSteps({ navigation, steps, setSteps }) {
           size={200}
           width={10}
           fill={steps <= 5 ? 5 : steps}
-          tintColor="#FF8C53"
+          tintColor='#FF8C53'
           // onAnimationComplete={() => console.log('onAnimationComplete')}
-          backgroundColor="rgb(80,80,80)"
+          backgroundColor='rgba(80,80,80,0.3)'
         />
         <View>
           <Text style={styles.steps}>{steps}</Text>
         </View>
       </View>
       <View style={styles.walkTextParent}>
-        <Image source={require('../assets/icons/walk.png')} />
+        <Image source={require('../assets/icons/walk.png')} style={{ tintColor: 'rgb(80,80,80)' }} />
         <Text style={styles.walkText}>Counting the steps</Text>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -102,4 +89,4 @@ const styles = StyleSheet.create({
     color: '#1ABDFF',
     marginVertical: -170,
   },
-});
+})

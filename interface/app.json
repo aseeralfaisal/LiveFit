@@ -8,9 +8,9 @@
     "userInterfaceStyle": "automatic",
     "assetBundlePatterns": ["**/*"],
     "splash": {
-      "image": "./assets/icons/livefitlogo.png",
-      "backgroundColor": "#1e1e1e",
-      "resizeMode": "contain",
+      "image": "./assets/icons/0livefitlogo.png",
+      "backgroundColor": "#ffffff",
+      "resizeMode": "contain"
     }
   }
 }

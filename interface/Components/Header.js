@@ -1,52 +1,47 @@
-import * as React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Modal,
-} from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import { useColorScheme } from 'react-native-appearance';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import ImageResizeMode from 'react-native/Libraries/Image/ImageResizeMode';
-import { db, storage } from './Firebase';
-import axios from 'axios';
+import * as React from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, Image, Modal } from 'react-native'
+import { StatusBar } from 'expo-status-bar'
+import { useColorScheme } from 'react-native-appearance'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import ImageResizeMode from 'react-native/Libraries/Image/ImageResizeMode'
+import { db, storage } from './Firebase'
+import axios from 'axios'
+
+import { AnimatedCircularProgress } from 'react-native-circular-progress'
 
 export default function Header({ navigation, setLoggedIn }) {
-  let colorScheme = useColorScheme();
+  let colorScheme = useColorScheme()
 
-  const [modal, setModal] = React.useState(false);
+  const [modal, setModal] = React.useState(false)
 
-  const [user, setUser] = React.useState('');
-  const [img, setImg] = React.useState(null);
+  const [user, setUser] = React.useState('')
+  const [img, setImg] = React.useState(null)
 
   const initLoad = async () => {
     try {
-      const username = await AsyncStorage.getItem('username');
-      setUser(username);
+      const username = await AsyncStorage.getItem('username')
+      setUser(username)
       db.collection('users')
         .doc(username)
         .onSnapshot((snap) => {
-          setImg(snap.data().dpLink);
-        });
+          setImg(snap.data().dpLink)
+        })
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   React.useEffect(() => {
-    initLoad();
+    initLoad()
     return () => {
-      initLoad();
-    };
-  }, []);
+      initLoad()
+    }
+  }, [])
 
   const logout = async () => {
-    setLoggedIn(false);
-    await AsyncStorage.removeItem('token');
-  };
+    setLoggedIn(false)
+    await AsyncStorage.removeItem('token')
+  }
 
   return (
     <>
@@ -58,30 +53,11 @@ export default function Header({ navigation, setLoggedIn }) {
             justifyContent: 'space-between',
             marginVertical: '8.2%',
             marginHorizontal: 20,
-          }}
-        >
+          }}>
           <View>
-            <Image
-              source={require('../assets/icons/LIVEFIT.png')}
-              style={styles.logo}
-            />
+            <Image source={require('../assets/icons/LIVEFIT-2.png')} style={styles.logo} />
           </View>
-          {/* <TouchableOpacity onPress={() => setModal(true)}> */}
           <TouchableOpacity onPress={() => navigation.navigate('about')}>
-            {/* <Image
-              source={require('./icons/user.png')}
-              // source={{ uri: img }}
-              // resizeMode={ImageResizeMode.contain}
-              style={{
-                height: 35,
-                width: 35,
-                marginHorizontal: 2,
-                tintColor:
-                  colorScheme === 'dark'
-                    ? 'rgb(999,999,999)'
-                    : 'rgb(999,999,999)',
-              }}
-            /> */}
             <Image
               source={img ? { uri: img } : require('../assets/icons/user.png')}
               resizeMode={ImageResizeMode.contain}
@@ -91,20 +67,18 @@ export default function Header({ navigation, setLoggedIn }) {
         </View>
 
         <Modal
-          animationType="fade"
+          animationType='fade'
           transparent={true}
           visible={modal}
           onRequestClose={() => {
-            setModal(false);
-          }}
-        >
+            setModal(false)
+          }}>
           <View
             style={{
               backgroundColor: 'rgba(30,30,30,0.85)',
               height: '100%',
               width: '100%',
-            }}
-          >
+            }}>
             <View style={styles.modal}>
               <TouchableOpacity style={styles.btn} onPress={logout}>
                 <Text style={styles.btnText}>Logout</Text>
@@ -113,10 +87,10 @@ export default function Header({ navigation, setLoggedIn }) {
           </View>
         </Modal>
 
-        <StatusBar style="light" />
+        <StatusBar style='dark' />
       </View>
     </>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -134,6 +108,10 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginHorizontal: 10,
     marginTop: -45,
+    overflow: 'hidden',
+    shadowOffset: { width: 10, height: 10 },
+    shadowColor: '#000',
+    shadowOpacity: 1,
   },
   text: {
     fontFamily: 'Comfortaa-Bold',
@@ -164,4 +142,4 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
   },
-});
+})
