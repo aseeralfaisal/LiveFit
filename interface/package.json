@@ -45,7 +45,9 @@
     "react-native-unimodules": "~0.13.3",
     "react-native-web": "~0.13.12",
     "styled-components": "^5.3.0",
-    "uuid": "^3.4.0"
+    "uuid": "^3.4.0",
+    "react-native-svg": "12.1.0",
+    "react-native-safe-area-context": "3.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

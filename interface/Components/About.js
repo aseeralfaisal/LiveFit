@@ -46,7 +46,7 @@ export default function About({ navigation }) {
     const user = {
       name,
     }
-    const out = await axios.post('http://192.168.100.5:3001/api/getUserinfo', user)
+    const out = await axios.post('https://livefitnodejs.herokuapp.com/api/getUserinfo', user)
     setDailyGoal(out.data.dailyGoal)
     setBodyweight(out.data.bodyweight)
     setBodyFat(out.data.bodyfat)
@@ -119,7 +119,7 @@ export default function About({ navigation }) {
       bodyweight,
       height,
     }
-    const out = await axios.post('http://192.168.100.5:3001/api/userinfo', userInfo)
+    const out = await axios.post('https://livefitnodejs.herokuapp.com/api/userinfo', userInfo)
     console.log(out.data)
     setModal(false)
   }

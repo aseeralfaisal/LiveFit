@@ -50,7 +50,8 @@ export default function Meals({ navigation }) {
     return () => getTodaysDate()
   })
 
-  const ipAddress = '192.168.100.5:3001'
+  // const ipAddress = '192.168.100.5:3001'
+  const ipAddress = 'livefitnodejs.herokuapp.com'
 
   const getInfofromServer = async () => {
     const name = await AsyncStorage.getItem('username')
@@ -191,7 +192,7 @@ export default function Meals({ navigation }) {
               style={{
                 fontSize: 16,
                 color: '#000',
-                display: item.time == todaysTime ? 'flex' : 'none',
+                // display: item.time == todaysTime ? 'flex' : 'none',
               }}>
               {item.mealName} {item.time}
             </Text>
