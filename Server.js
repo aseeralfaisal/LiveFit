@@ -34,7 +34,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
-    useFindAndModify: false,
+    useFindAndModify: true,
   })
   .then(() => console.log('connected'))
   .catch((err) => console.log(err))
@@ -112,7 +112,7 @@ app.post('/api/signup', async (req, res) => {
       res.json({ response })
     } else res.send('User already exists')
   } catch (err) {
-    console.log('error')
+    console.log(err)
   }
 })
 
@@ -129,7 +129,7 @@ app.post('/api/login', async (req, res) => {
           id: user._id,
           name: user.name,
         },
-        process.env.PRIVATE_KEY
+        "secret_key"
       )
       return res.status(200).json({ token, txt: 'Granted' })
     } else {
