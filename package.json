@@ -2,7 +2,7 @@
   "name": "livefit",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
@@ -37,6 +37,6 @@
     "nodemon": "^2.0.12"
   },
   "engines": {
-    "node": "14.17.1"
+    "node": "14.17.6"
   }
 }
