@@ -30,6 +30,7 @@
     "mongodb": "^3.6.10",
     "mongoose": "^5.13.3",
     "node-fetch": "^2.6.1",
+    "node-gyp": "^8.2.0",
     "nodemon": "^2.0.12"
   },
   "engines": {
