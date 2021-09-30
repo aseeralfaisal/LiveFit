@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
 const MealsSchema = mongoose.Schema({
   mealName: {
@@ -9,11 +9,15 @@ const MealsSchema = mongoose.Schema({
     type: Array,
     required: true,
   },
+  totalCals: {
+    type: String,
+    required: true,
+  },
   time: {
     type: String,
     required: true,
   },
-});
-const Meals = mongoose.model('Meals', MealsSchema);
+})
+const Meals = mongoose.model('Meals', MealsSchema)
 
-module.exports = Meals;
+module.exports = Meals
