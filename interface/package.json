@@ -41,13 +41,17 @@
     "react-native-google-fit": "^0.17.0",
     "react-native-paper": "^4.9.2",
     "react-native-reanimated": "~2.1.0",
+    "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.0.0",
+    "react-native-svg": "12.1.0",
     "react-native-unimodules": "~0.13.3",
     "react-native-web": "~0.13.12",
+    "react-redux": "^7.2.5",
+    "react-thunk": "^1.0.0",
+    "redux": "^4.1.1",
+    "redux-logger": "^3.0.6",
     "styled-components": "^5.3.0",
-    "uuid": "^3.4.0",
-    "react-native-svg": "12.1.0",
-    "react-native-safe-area-context": "3.2.0"
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

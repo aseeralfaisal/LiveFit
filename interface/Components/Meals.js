@@ -29,13 +29,13 @@ export default function Meals({ navigation }) {
   const [totalCal, setTotalCal] = React.useState('')
   const [mealName, setMealName] = React.useState('')
   const [meals, setMeals] = React.useState('')
-  const [todaysMeals, setTodaysMeals] = React.useState([])
   const [foodItems, setFoodItems] = React.useState([])
   const [loader, setLoader] = React.useState(false)
   const [modal, setModal] = React.useState(false)
   const [mealDetailModal, setMealDetailModal] = React.useState(false)
   const [foodMenu, setFoodMenu] = React.useState(false)
   const [todaysTime, setTodaysTime] = React.useState(null)
+  const [totalMealQuantity, setTotalMealQuantity] = React.useState('')
 
   const getTodaysDate = () => {
     const date = new Date()
@@ -43,15 +43,15 @@ export default function Meals({ navigation }) {
     const currentMonth = date.getMonth()
     const currentYear = date.getFullYear()
     setTodaysTime(currentDate + '-' + currentMonth + '-' + currentYear)
-    console.log('today ' + todaysTime)
+    // console.log('today ' + todaysTime)
   }
   React.useEffect(() => {
     getTodaysDate()
     return () => getTodaysDate()
   })
 
-  // const ipAddress = '192.168.100.5:3001'
-  const ipAddress = 'livefitnodejs.herokuapp.com'
+  const ipAddress = '192.168.100.4:3001'
+  // const ipAddress = 'livefitnodejs.herokuapp.com'
 
   const getInfofromServer = async () => {
     const name = await AsyncStorage.getItem('username')
@@ -65,34 +65,33 @@ export default function Meals({ navigation }) {
   const getMealsfromServer = async () => {
     const out = await axios.get('http://' + ipAddress + '/api/getMeals')
     setMeals(out.data)
-  }
-
-  const getTodaysMeals = async () => {
-    const out = await axios.get('http://' + ipAddress + '/api/findTodaysMeals')
-    setTodaysMeals(out.data)
+    // console.log(out.data)
   }
 
   React.useEffect(() => {
     getInfofromServer()
   }, [])
 
-  React.useEffect(() => {
-    getTodaysMeals()
-    return () => getTodaysMeals()
-  }, [])
+  // React.useEffect(() => {
+  //   getTodaysMeals()
+  //   return () => getTodaysMeals()
+  // }, [])
 
   React.useEffect(() => {
     getMealsfromServer()
     return () => getMealsfromServer()
   }, [])
 
-  const addItemToDB = async () => {
-    const Items = { mealName, foodItems }
+  const addToYourRoutine = async () => {
+    const totCals = []
+    foodItems.map((item) => totCals.push(item.calories))
+    const totalCals = totCals.reduce((a, b) => a + b, 0)
+    const Items = { mealName, foodItems, totalCals }
     const res = await axios.post('http://' + ipAddress + '/api/saveInfoToDB', Items)
     setModal(false)
     console.log(res.data)
     getMealsfromServer()
-    getTodaysMeals()
+    // getTodaysMeals()
   }
 
   const addMeals = (name, serve, carbs, protein, fats, calories) => {
@@ -116,13 +115,16 @@ export default function Meals({ navigation }) {
   }
 
   const [mealDetailName, setMealDetailName] = React.useState('')
-  const [mealDetailCals, setMealDetailCals] = React.useState([])
+  const [mealDetailCals, setMealDetailCals] = React.useState('')
 
   const insideMealDetail = (items) => {
-    console.log(items)
     setMealDetailName(items.mealName)
     let arrCals = []
+    let totCals = []
     items.foodItems.map((item) => arrCals.push(item))
+    items.foodItems.map((item) => totCals.push(item.calories))
+    const sum = totCals.reduce((a, b) => a + b, 0)
+    setTotalMealQuantity(sum)
     setMealDetailCals(arrCals)
     setMealDetailModal(true)
   }
@@ -184,23 +186,31 @@ export default function Meals({ navigation }) {
         data={meals}
         renderItem={({ item }) => (
           <TouchableOpacity
-            // style={[styles.meals]}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              marginVertical: 10,
+              backgroundColor: 'rgb(80,80,80)',
+              marginHorizontal: 40,
+              borderRadius: 20,
+              padding: 10,
+              display: item.time == todaysTime ? 'flex' : 'none',
+            }}
             onPress={() => {
               insideMealDetail(item)
             }}>
             <Text
               style={{
                 fontSize: 16,
-                color: '#000',
-                // display: item.time == todaysTime ? 'flex' : 'none',
+                color: '#fff',
               }}>
-              {item.mealName} {item.time}
+              {item.mealName} {`${item.totalCals} cals`}
             </Text>
           </TouchableOpacity>
         )}
         keyExtractor={(item, idx) => idx.toString()}
       />
-      {/* )} */}
+
       <InsideMealDetails
         animationType='slide'
         transparent={true}
@@ -220,22 +230,25 @@ export default function Meals({ navigation }) {
             <FlatList
               data={mealDetailCals}
               renderItem={({ item }) => (
-                <Text
-                  style={{
-                    fontSize: 16,
-                    color: 'white',
-                    flexDirection: 'row',
-                    alignSelf: 'center',
-                    textTransform: 'capitalize',
-                  }}>
-                  {item.name} {item.calories} cals
-                </Text>
+                <View>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: 'white',
+                      flexDirection: 'row',
+                      alignSelf: 'center',
+                      textTransform: 'capitalize',
+                    }}>
+                    {item.name} {item.calories} cals
+                  </Text>
+                </View>
               )}
-              keyExtractor={(item, idx) => idx}
+              keyExtractor={(item, idx) => idx.toString()}
             />
           ) : (
             <View></View>
           )}
+          <Text style={{ color: 'white' }}>{totalMealQuantity}</Text>
         </View>
       </InsideMealDetails>
       <Modal
@@ -293,7 +306,7 @@ export default function Meals({ navigation }) {
             <Text style={styles.tileText}>Search food items</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity activeOpacity={0.7} style={styles.tile} onPress={() => addItemToDB()}>
+          <TouchableOpacity activeOpacity={0.7} style={styles.tile} onPress={() => addToYourRoutine()}>
             <Image source={require('../assets/icons/add.png')} style={styles.tileMenuIcon} />
             <Text style={styles.tileText}>Add to your routine</Text>
           </TouchableOpacity>

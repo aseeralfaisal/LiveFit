@@ -128,7 +128,7 @@ app.post('/api/login', async (req, res) => {
           id: user._id,
           name: user.name,
         },
-        "secret_key"
+        'secret_key'
       )
       return res.status(200).json({ token, txt: 'Granted' })
     } else {
@@ -188,6 +188,7 @@ app.post('/api/getCalories', async (req, res) => {
 app.post('/api/saveInfoToDB', async (req, res) => {
   const mealName = req.body.mealName
   const foodItems = req.body.foodItems
+  const totalCals = req.body.totalCals
   const date = new Date()
   const currentDate = date.getDate()
   const currentMonth = date.getMonth()
@@ -195,6 +196,7 @@ app.post('/api/saveInfoToDB', async (req, res) => {
   const food = await Meals.create({
     mealName,
     foodItems,
+    totalCals,
     time: currentDate + '-' + currentMonth + '-' + currentYear,
   })
   res.send(food)

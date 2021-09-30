@@ -6,9 +6,14 @@ import Menu from './Meals'
 import { useColorScheme } from 'react-native-appearance'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import axios from 'axios'
+import { useSelector, useDispatch } from 'react-redux'
+import { setObj } from '../redux/actions'
 
 export default function Home({ navigation, steps, setSteps, setLoggedIn }) {
   let colorScheme = useColorScheme()
+
+  const { obj } = useSelector((state) => state.userReducer)
+  const dispatch = useDispatch()
 
   return (
     <View
