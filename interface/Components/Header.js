@@ -17,26 +17,26 @@ export default function Header({ navigation, setLoggedIn }) {
   const [user, setUser] = React.useState('')
   const [img, setImg] = React.useState(null)
 
-  const initLoad = async () => {
-    try {
-      const username = await AsyncStorage.getItem('username')
-      setUser(username)
-      db.collection('users')
-        .doc(username)
-        .onSnapshot((snap) => {
-          setImg(snap.data().dpLink)
-        })
-    } catch (err) {
-      console.log(err)
-    }
-  }
+  // const initLoad = async () => {
+  //   try {
+  //     const username = await AsyncStorage.getItem('username')
+  //     setUser(username)
+  //     db.collection('users')
+  //       .doc(username)
+  //       .onSnapshot((snap) => {
+  //         setImg(snap.data().dpLink)
+  //       })
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // }
 
-  React.useEffect(() => {
-    initLoad()
-    return () => {
-      initLoad()
-    }
-  }, [])
+  // React.useEffect(() => {
+  //   initLoad()
+  //   return () => {
+  //     initLoad()
+  //   }
+  // }, [])
 
   const logout = async () => {
     setLoggedIn(false)
@@ -51,18 +51,21 @@ export default function Header({ navigation, setLoggedIn }) {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginVertical: '8.2%',
-            marginHorizontal: 20,
+            marginTop: '12%',
+            marginHorizontal: 40,
           }}>
           <View>
             <Image source={require('../assets/icons/LIVEFIT-2.png')} style={styles.logo} />
           </View>
           <TouchableOpacity onPress={() => navigation.navigate('about')}>
-            <Image
-              source={img ? { uri: img } : require('../assets/icons/user.png')}
-              resizeMode={ImageResizeMode.contain}
-              style={styles.log}
-            />
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Image
+                source={img ? { uri: img } : require('../assets/icons/body.png')}
+                resizeMode={ImageResizeMode.contain}
+                style={styles.log}
+              />
+              <Text style={{ color: "#000", fontFamily: "Comfortaa-Bold", fontSize: 20, marginHorizontal: 6 }}>User</Text>
+            </View>
           </TouchableOpacity>
         </View>
 
@@ -96,11 +99,13 @@ export default function Header({ navigation, setLoggedIn }) {
 const styles = StyleSheet.create({
   container: {
     flex: 0,
+    marginBottom: -15
   },
   log: {
     width: 35,
     height: 35,
     borderRadius: 50,
+    tintColor: "rgb(100,100,100)"
   },
   logo: {
     // height: 200,

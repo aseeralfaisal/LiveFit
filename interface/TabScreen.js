@@ -10,6 +10,7 @@ import { useColorScheme } from 'react-native-appearance'
 import { StyleSheet, Image, View } from 'react-native'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
+import FoodScan from './Components/FoodScan'
 
 const Tab = createMaterialBottomTabNavigator()
 
@@ -21,10 +22,12 @@ export default function TabScreen({ setLoggedIn }) {
   const HomeStack = ({ navigation }) => {
     return (
       <View style={{ flex: 1, backgroundColor: 'rgba(80,80,80,0.3)' }}>
-        <Stack.Navigator headerMode={'none'}>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name='Home' children={() => <Home navigation={navigation} steps={steps} setSteps={setSteps} />} />
           <Stack.Screen name='WalkSteps' children={() => <WalkSteps steps={steps} setSteps={setSteps} />} />
           <Stack.Screen name='Workouts' children={() => <Workouts />} />
+          <Stack.Screen name='BMI' children={() => <BMI />} />
+          <Stack.Screen name='FoodScan' children={() => <FoodScan />} />
         </Stack.Navigator>
       </View>
     )
@@ -36,15 +39,15 @@ export default function TabScreen({ setLoggedIn }) {
       <Tab.Navigator
         initialRouteName='HomeStack'
         sceneAnimationEnabled={false}
-        activeColor='rgb(80,120,200)'
-        barStyle={{ backgroundColor: 'rgb(250,250,250)' }} 
+        activeColor='rgb(80,80,80)'
+        barStyle={{ backgroundColor: 'rgb(250,250,250)' }}
         shifting={true}
         labeled={false}>
         <Tab.Screen
           name='HomeStack'
           component={HomeStack}
           options={{
-            tabBarLabel: 'Home',
+            tabBarLabel: 'HomeStack',
             tabBarIcon: ({ color }) => (
               <Image
                 source={require('./assets/icons/home.png')}
@@ -66,7 +69,7 @@ export default function TabScreen({ setLoggedIn }) {
             tabBarLabel: 'Calories',
             tabBarIcon: ({ color }) => (
               <Image
-                source={require('./assets/icons/calories.png')}
+                source={require('./assets/icons/statistics.png')}
                 style={{
                   height: 30,
                   width: 30,
@@ -76,7 +79,7 @@ export default function TabScreen({ setLoggedIn }) {
             ),
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name='BMI'
           component={BMI}
           options={{
@@ -92,15 +95,15 @@ export default function TabScreen({ setLoggedIn }) {
               />
             ),
           }}
-        />
+        /> */}
         <Tab.Screen
           name='about'
           component={about}
           options={{
-            tabBarLabel: 'BMI',
+            tabBarLabel: "Info",
             tabBarIcon: ({ color }) => (
               <Image
-                source={require('./assets/icons/info.png')}
+                source={require('./assets/icons/body.png')}
                 style={{
                   height: 30,
                   width: 30,

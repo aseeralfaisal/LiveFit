@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   circleContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 100,
+    marginTop: 170,
   },
   bmi: {
     fontFamily: 'Comfortaa-Regular',

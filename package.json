@@ -22,6 +22,7 @@
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
+    "expo-navigation-bar": "^1.1.2",
     "express": "^4.17.1",
     "firebase-admin": "^9.11.0",
     "ip": "^1.1.5",
@@ -33,6 +34,5 @@
   },
   "engines": {
     "node": "14.17.6"
-  },
-  "devDependencies": {}
+  }
 }

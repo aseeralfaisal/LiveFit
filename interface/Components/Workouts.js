@@ -59,7 +59,7 @@ export default function Workouts({ navigation }) {
       <View
         style={{
           flex: 1,
-          backgroundColor: '#ffffff',
+          backgroundColor: '#fff'
         }}>
         <Header navigation={navigation} />
         <>
@@ -71,7 +71,6 @@ export default function Workouts({ navigation }) {
           ) : (
             <FlatList
               data={exerciseDATA}
-              style={{ marginTop: -40 }}
               renderItem={({ item, index }) => {
                 return (
                   <>
@@ -117,12 +116,12 @@ export default function Workouts({ navigation }) {
           </View>
         </Modal>
         {listView && (
-          <Text style={{ fontSize: 40, alignSelf: 'center', fontFamily: 'Comfortaa-Bold', color: 'rgb(80,80,80)', marginBottom: -25 }}>
+          <Text style={{ fontSize: 40, alignSelf: 'center', fontFamily: 'Comfortaa-Bold', color: 'rgb(80,80,80)' }}>
             {watch}
           </Text>
         )}
         <TouchableOpacity activeOpacity={0.7} style={styles.tile} onPress={onStart}>
-          <Text style={{ fontSize: 24, alignSelf: 'center', color: 'white', padding: 5, fontFamily: 'Comfortaa-Bold' }}>
+          <Text style={{ fontSize: 24, alignSelf: 'center', color: 'white', padding: 5, color: "#555" }}>
             {!start ? 'Start' : 'Pause'}
           </Text>
         </TouchableOpacity>
@@ -137,7 +136,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Comfortaa-Bold',
     color: 'rgb(80,80,80)',
     fontSize: 20,
-    alignSelf: 'center',
   },
   titleTxt: {
     marginHorizontal: 8,
@@ -151,10 +149,12 @@ const styles = StyleSheet.create({
   },
   tile: {
     borderRadius: 25,
-    backgroundColor: 'rgb(80,120,200)',
+    backgroundColor: '#ecf4f7',
     flexDirection: 'row',
     justifyContent: 'center',
     marginVertical: 30,
     marginHorizontal: 30,
+    borderColor: "#000",
+    borderWidth: 0.1
   },
 })

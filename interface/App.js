@@ -5,6 +5,7 @@ import AppLoading from 'expo-app-loading';
 import TabScreen from './TabScreen';
 import SignIn from './Components/SignIn';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FoodScan from './Components/FoodScan';
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -25,10 +26,11 @@ export default function App() {
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
-    return loggedIn ? (
-      <TabScreen loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-    ) : (
-      <SignIn loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-    );
+    // return loggedIn ? (
+    //   <TabScreen loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+    // ) : (
+    //   <SignIn loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+    // );
+    return <TabScreen loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
   }
 }
