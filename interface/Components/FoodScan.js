@@ -12,7 +12,6 @@ export default function FoodScan() {
   const [predictions, setPredictions] = useState(null)
   const [type, setType] = useState(Camera.Constants.Type.back)
   const [pic, setPic] = useState()
-  const [nutrientInfo, setNutrientInfo] = useState(null)
   const [servingSize, setServingSize] = useState("")
   const [calories, setCalories] = useState("")
 
@@ -45,7 +44,7 @@ export default function FoodScan() {
         { id: Clarifai.FOOD_MODEL },
         { base64: source },
         { maxConcepts: 10, minValue: 0.4 }
-      );
+      )
       setPredictions(newPredictions?.outputs[0]?.data?.concepts[0]?.name)
       const nutrientData = await axios.get(`https://api.calorieninjas.com/v1/nutrition?query=${newPredictions?.outputs[0]?.data?.concepts[0]?.name}`, {
         headers: {

@@ -79,23 +79,6 @@ export default function TabScreen({ setLoggedIn }) {
             ),
           }}
         />
-        {/* <Tab.Screen
-          name='BMI'
-          component={BMI}
-          options={{
-            tabBarLabel: 'BMI',
-            tabBarIcon: ({ color }) => (
-              <Image
-                source={require('./assets/icons/weight_scale.png')}
-                style={{
-                  height: 30,
-                  width: 30,
-                  tintColor: color,
-                }}
-              />
-            ),
-          }}
-        /> */}
         <Tab.Screen
           name='about'
           component={about}

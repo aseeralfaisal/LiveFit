@@ -70,7 +70,7 @@ export default function Home({ navigation, steps, setSteps, setLoggedIn }) {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity activeOpacity={0.7} style={styles.tileView}>
+        <TouchableOpacity activeOpacity={0.7} style={styles.tileView} onPress={() => navigation.navigate("WalkSteps")}>
           <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <View style={styles.roundbg}>
               <Image source={require('../assets/icons/walk.png')} style={styles.circleIcon} />
