@@ -8,8 +8,8 @@ import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import axios from 'axios'
 import { Accelerometer } from 'expo-sensors'
 import { startCounter, stopCounter } from 'react-native-accurate-step-counter'
-// import { useSelector, useDispatch } from 'react-redux'
-// import { setObj } from '../redux/actions'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import * as icons from '@fortawesome/free-solid-svg-icons'
 
 export default function Home({ navigation, steps, setSteps, setLoggedIn }) {
   let colorScheme = useColorScheme()
@@ -26,22 +26,24 @@ export default function Home({ navigation, steps, setSteps, setLoggedIn }) {
         <TouchableOpacity activeOpacity={0.7} style={styles.tileView} onPress={() => navigation.navigate("FoodScan")}>
           <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <View style={styles.roundbg}>
-              <Image source={require('../assets/icons/food.png')} style={styles.circleIcon} />
+              {/* <Image source={require('../assets/icons/tips.png')} style={styles.circleIcon} /> */}
+              <FontAwesomeIcon icon={icons.faBalanceScale} size={55} color='#555' />
             </View>
-            <Text style={styles.tileText}>Meals</Text>
+            <Text style={styles.tileText}>Food Scan</Text>
           </View>
         </TouchableOpacity>
 
         <TouchableOpacity activeOpacity={0.7} style={styles.tileView} onPress={() => navigation.navigate("Workouts")}>
           <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <View style={styles.roundbg}>
+              {/* <FontAwesome name='life-buoy' size={55} style={{ color: "#888" }} /> */}
               <Image source={require('../assets/icons/workout.png')} style={styles.circleIcon} />
             </View>
             <Text style={styles.tileText}>Workout</Text>
           </View>
         </TouchableOpacity>
       </View>
-      <View style={styles.twoTileView}>
+      {/* <View style={styles.twoTileView}>
         <TouchableOpacity activeOpacity={0.7} style={styles.tileView}>
           <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <View style={styles.roundbg}>
@@ -59,7 +61,7 @@ export default function Home({ navigation, steps, setSteps, setLoggedIn }) {
             <Text style={styles.tileText}>Discover</Text>
           </View>
         </TouchableOpacity>
-      </View>
+      </View> */}
       <View style={styles.twoTileView}>
         <TouchableOpacity activeOpacity={0.7} style={styles.tileView} onPress={() => navigation.navigate("BMI")}>
           <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -133,6 +135,7 @@ const styles = StyleSheet.create({
     // marginTop: 28,
     width: 55,
     height: 55,
+    resizeMode: 'contain',
     tintColor: 'rgb(100,100,100)', //rgb(41, 171, 226) //rgb(255, 140, 83)
   },
   stepsText: {

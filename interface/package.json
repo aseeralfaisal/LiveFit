@@ -8,6 +8,10 @@
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.1.0",
+    "@expo/vector-icons": "^12.0.0",
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/react-native-fontawesome": "^0.2.7",
     "@react-native-async-storage/async-storage": "^1.13.0",
     "@react-native-firebase/storage": "^12.3.0",
     "@react-navigation/bottom-tabs": "^5.11.11",

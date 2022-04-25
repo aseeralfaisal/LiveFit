@@ -9,6 +9,8 @@ import uuid from 'uuid'
 import { db, storage } from './Firebase'
 import { BlurView } from 'expo-blur'
 import axios from 'axios'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import * as icons from '@fortawesome/free-solid-svg-icons'
 
 export default function About({ navigation }) {
   let colorScheme = useColorScheme()
@@ -157,7 +159,7 @@ export default function About({ navigation }) {
           <Text style={styles.aboutInfoText}>BF Percentage: {bodyfat}</Text>
         </View>
         <View style={styles.infoIcons}>
-          <Image source={require('../assets/icons/height.png')} style={styles.InfoIconsOnly} />
+          {/* <Image source={require('../assets/icons/height.png')} style={styles.InfoIconsOnly} /> */}
           <Text style={styles.aboutInfoText}>Height: {height}m</Text>
         </View>
       </View>

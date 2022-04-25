@@ -50,7 +50,7 @@ export default function TabScreen({ setLoggedIn }) {
             tabBarLabel: 'HomeStack',
             tabBarIcon: ({ color }) => (
               <Image
-                source={require('./assets/icons/home.png')}
+                source={require('./assets/icons/dashboard.png')}
                 style={{
                   height: 30,
                   width: 30,
